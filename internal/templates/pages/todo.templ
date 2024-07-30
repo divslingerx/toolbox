@@ -1,0 +1,13 @@
+package pages
+
+import (
+	"toolbox/internal/domain"
+	"toolbox/internal/templates/partials"
+	"toolbox/internal/templates/shared"
+)
+
+templ TodoPage(todo *domain.Todo) {
+	@shared.Page("Todo") {
+		@partials.EditTodoForm(todo)
+	}
+}

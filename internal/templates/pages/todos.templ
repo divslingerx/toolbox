@@ -1,0 +1,15 @@
+package pages
+
+import (
+	"toolbox/internal/domain"
+	"toolbox/internal/templates/partials"
+	"toolbox/internal/templates/shared"
+)
+
+templ TodosPage(todos []*domain.Todo, term string) {
+	@shared.Page("Home") {
+		@partials.Search(term)
+		@partials.RenderTodos(todos)
+		@partials.AddTodoForm()
+	}
+}

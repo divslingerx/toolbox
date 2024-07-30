@@ -1,0 +1,32 @@
+package partials
+
+import "toolbox/internal/domain"
+
+templ EditTodoForm(todo *domain.Todo) {
+	<form
+		method="POST"
+		action={ templ.URL("/todos/" + todo.ID.String() + "/edit") }
+		hx-target="this"
+		hx-swap="outerHTML"
+		hx-patch={ "/todos/" + todo.ID.String() }
+		class="inline"
+	>
+		<div class="block py-2 border-b-4 border-dotted border-red-900">
+			<input
+				type="hidden"
+				name="completed"
+				if todo.Completed {
+					value="true"
+				} else {
+					value="false"
+				}
+			/>
+			<input
+				type="text"
+				name="description"
+				value={ todo.Description }
+			/>
+			<input type="submit" class="hidden"/>
+		</div>
+	</form>
+}

@@ -1,0 +1,61 @@
+package partials
+
+import (
+	"toolbox/internal/domain"
+	"toolbox/internal/templates/shared"
+)
+
+templ RenderTodos(todos []*domain.Todo) {
+	<div class="mb-4">
+		@shared.Panel() {
+			@Search("")
+		}
+	</div>
+	<div
+		hx-post="/todos/sort"
+		hx-trigger="end"
+		class="block p-0 mb-2 text-lg"
+	>
+		<div id="todos" class="sortable">
+			<ul class="flex flex-col gap-1">
+				for _, todo := range todos {
+					<li
+						id={ "todo-" + todo.ID.String() }
+						class="flex items-center justify-between p-2 bg-white rounded-lg shadow-md draggable todo"
+					>
+						<div id={ "todo-body" + todo.ID.String() }>
+							@RenderTodo(todo)
+						</div>
+						<div class="flex justify-end">
+							<button
+								hx-target={ "#todo-body" + todo.ID.String() }
+								type="submit"
+								hx-get={ "/todos/" + todo.ID.String() }
+								class="focus:outline focus:outline-red-500 focus:outline-4 mr-2"
+							>
+								📝
+							</button>
+							<button
+								type="submit"
+								hx-target={ "#todo-" + todo.ID.String() }
+								hx-swap="outerHTML"
+								hx-delete={ "/todos/" + todo.ID.String() }
+								class="focus:outline focus:outline-red-500 focus:outline-4 mr-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+							>
+								Clear
+							</button>
+						</div>
+					</li>
+				}
+			</ul>
+			<div id="no-todos" class="hidden second:block second:pb-2 second:pt-3">
+				<p>Congrats, you have no todos! Or... do you? 😰</p>
+			</div>
+		</div>
+	</div>
+	<div class="mt-8">
+		@shared.Panel() {
+			@AddTodoForm()
+		}
+	</div>
+}
