@@ -7,9 +7,9 @@ import (
 )
 
 templ TodosPage(todos []*domain.Todo, term string) {
-	@shared.Page("Home") {
-		@partials.Search(term)
-		@partials.RenderTodos(todos)
-		@partials.AddTodoForm()
+	@shared.Page("Todos") {
+		<div class="max-w-3xl mx-auto">
+			@partials.RenderTodos(todos)
+		</div>
 	}
 }

@@ -7,7 +7,9 @@ import (
 )
 
 templ TodoPage(todo *domain.Todo) {
-	@shared.Page("Todo") {
-		@partials.EditTodoForm(todo)
-	}
+	<div class="container mx-auto max-w-7xl">
+		@shared.Page("Todo") {
+			@partials.RenderTodo(todo)
+		}
+	</div>
 }

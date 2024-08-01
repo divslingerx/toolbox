@@ -5,12 +5,48 @@ import (
 	"toolbox/internal/templates/shared"
 )
 
+templ ClearTodoButton(todo *domain.Todo) {
+	<button
+		type="submit"
+		hx-target={ "#todo-" + todo.ID.String() }
+		hx-swap="outerHTML"
+		hx-delete={ "/todos/" + todo.ID.String() }
+		class="focus:outline focus:outline-red-500 focus:outline-4 mr-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+	>
+		Clear
+	</button>
+}
+
+templ EditTodoButton(todo *domain.Todo) {
+	<button
+		hx-target={ "#todo-body" + todo.ID.String() }
+		type="submit"
+		hx-get={ "/todos/" + todo.ID.String() }
+		class="focus:outline focus:outline-red-500 focus:outline-4 mr-2"
+	>
+		Edit
+	</button>
+}
+
+templ TodoItem(todo *domain.Todo) {
+	<li
+		id={ "todo-" + todo.ID.String() }
+		class="flex gap-4 p-4 items-center justify-between bg-white rounded-lg shadow-md draggable todo"
+	>
+		<div id={ "todo-body" + todo.ID.String() }>
+			@RenderTodo(todo)
+		</div>
+		<div class="flex justify-end">
+			@EditTodoButton(todo)
+			@ClearTodoButton(todo)
+		</div>
+	</li>
+}
+
 templ RenderTodos(todos []*domain.Todo) {
-	<div class="mb-4">
-		@shared.Panel() {
-			@Search("")
-		}
-	</div>
+	@shared.Panel() {
+		@Search("")
+	}
 	<div
 		hx-post="/todos/sort"
 		hx-trigger="end"
@@ -19,33 +55,7 @@ templ RenderTodos(todos []*domain.Todo) {
 		<div id="todos" class="sortable">
 			<ul class="flex flex-col gap-1">
 				for _, todo := range todos {
-					<li
-						id={ "todo-" + todo.ID.String() }
-						class="flex items-center justify-between p-2 bg-white rounded-lg shadow-md draggable todo"
-					>
-						<div id={ "todo-body" + todo.ID.String() }>
-							@RenderTodo(todo)
-						</div>
-						<div class="flex justify-end">
-							<button
-								hx-target={ "#todo-body" + todo.ID.String() }
-								type="submit"
-								hx-get={ "/todos/" + todo.ID.String() }
-								class="focus:outline focus:outline-red-500 focus:outline-4 mr-2"
-							>
-								📝
-							</button>
-							<button
-								type="submit"
-								hx-target={ "#todo-" + todo.ID.String() }
-								hx-swap="outerHTML"
-								hx-delete={ "/todos/" + todo.ID.String() }
-								class="focus:outline focus:outline-red-500 focus:outline-4 mr-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
-							>
-								Clear
-							</button>
-						</div>
-					</li>
+					@TodoItem(todo)
 				}
 			</ul>
 			<div id="no-todos" class="hidden second:block second:pb-2 second:pt-3">

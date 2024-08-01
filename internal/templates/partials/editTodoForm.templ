@@ -21,11 +21,14 @@ templ EditTodoForm(todo *domain.Todo) {
 					value="false"
 				}
 			/>
-			<input
+			<textarea
 				type="text"
 				name="description"
 				value={ todo.Description }
-			/>
+				class="block w-full p-2 mb-2 border border-gray-300 rounded"
+				cols="60"
+				rows="8"
+			></textarea>
 			<input type="submit" class="hidden"/>
 		</div>
 	</form>
